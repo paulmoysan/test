@@ -1,0 +1,40 @@
+
+import json
+
+def load_json_file(file_path):
+    """Load the JSON data from the given file path."""
+    with open(file_path, 'r') as file:
+        return json.load(file)
+
+def get_schema(data):
+    """Extract the schema from a JSON object (a dictionary in Python)."""
+    return sorted([(key, type(value).__name__) for key, value in data.items()])
+
+def compare_schemas(schema1, schema2):
+    """Compare two schemas to check if they are identical."""
+    return schema1 == schema2
+
+def check_format_consistency(json_data):
+    """Check the consistency of format across all records in the JSON data."""
+    if not json_data:
+        return True  # Empty data is consistent by default
+
+    reference_schema = get_schema(json_data[0])
+    for index, record in enumerate(json_data[1:], start=1):  # Start from the second record
+        current_schema = get_schema(record)
+        if not compare_schemas(reference_schema, current_schema):
+            print(f"Inconsistency found in record {index}!")
+            print(f"Reference schema: {reference_schema}")
+            print(f"Current record schema: {current_schema}")
+            print("Incorrect record details:")
+            for key, value in record.items():
+                print(f"  {key}: {value}")
+            return False  # Inconsistency found
+
+    print("All records follow the same schema.")
+    return True  # All records are consistent
+
+# Replace 'your_file_path.json' with the actual path to your JSON file
+file_path = 'trades2.json'
+json_data = load_json_file(file_path)
+check_format_consistency(json_data)
