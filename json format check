@@ -1,0 +1,20 @@
+import json
+
+def check_json_format(file_path):
+    try:
+        with open(file_path, 'r') as file:
+            parsed_json = json.load(file)  # Load JSON data from file
+        print("JSON format is correct.")
+    except json.JSONDecodeError as e:
+        print(f"JSON format is incorrect: {e}")
+    except FileNotFoundError:
+        print(f"File not found: {file_path}")
+    except Exception as e:
+        print(f"An unexpected error occurred: {e}")
+
+if __name__ == "__main__":
+    # Path to your JSON file
+    json_file_path = 'path/to/your/file.json'
+    
+    # Check if the JSON format in the file is correct
+    check_json_format(json_file_path)
