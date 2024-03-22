@@ -1,0 +1,33 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Fri Mar 22 15:30:45 2024
+
+@author: paulm
+"""
+
+import json
+
+def count_nb_record(json_data, field_name):
+    """
+    Recursively count the occurrences of field_name in the json_data.
+    """
+    if isinstance(json_data, dict):
+        return sum(count_nb_record(v, field_name) for v in json_data.values()) + (field_name in json_data)
+    elif isinstance(json_data, list):
+        return sum(count_nb_record(item, field_name) for item in json_data)
+    return 0
+
+# Path to your JSON file
+json_file_path = 'trades2.json'
+
+# Field name you want to count occurrences of
+field_to_count = 'tradeReference'
+
+# Reading the JSON file
+with open(json_file_path, 'r') as json_file:
+    data = json.load(json_file)
+
+# Counting occurrences
+occurrences = count_nb_record(data, field_to_count)
+
+print(f"The field '{field_to_count}' occurred {occurrences} times in the JSON file.")
